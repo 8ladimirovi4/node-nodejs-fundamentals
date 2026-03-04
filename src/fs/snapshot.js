@@ -1,8 +1,5 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const snapshot = async () => {
   // Write your code here
@@ -24,13 +21,13 @@ const snapshot = async () => {
     entries
   }
 
-  await writeSnapshot(data)
+  await writeSnapshot(data, rootPath)
 };
 
 await snapshot();
 
-async function writeSnapshot(data) {
-  const outputPath = path.join(__dirname, 'snapshot.json')
+async function writeSnapshot(data, workspacePath) {
+  const outputPath = path.join(path.dirname(workspacePath), 'snapshot.json')
   await fs.writeFile(outputPath, JSON.stringify(data, null, 2), 'utf-8')
 }
 
