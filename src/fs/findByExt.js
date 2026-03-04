@@ -33,7 +33,7 @@ await findByExt();
 function filterFilesByUserInput(entries, inputs) {
   const result = entries.filter((entry) => {
     const ext = path.extname(entry.name);
-    return inputs.has(ext.replaceAll('.', ''));
+    return inputs.has(ext.replaceAll('.', '').toLowerCase());
   });
 
   return result.sort((a, b) => a.path.localeCompare(b.path));
@@ -42,7 +42,7 @@ function filterFilesByUserInput(entries, inputs) {
 function findAllUserInputs(index, result = []) {
   const ext = argv[index + 1];
   if (ext) {
-    result.push(ext);
+    result.push(ext.toLowerCase());
     findAllUserInputs(index + 1, result);
   }
   return new Set(result.map((el) => el.replaceAll('.', '')));
