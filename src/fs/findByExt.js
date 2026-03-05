@@ -1,30 +1,29 @@
 import path from 'path';
 import fs from 'fs/promises';
 
-const {argv, stdout} = process
+const { argv, stdout } = process;
 
 const findByExt = async () => {
   // Write your code here
   // Recursively find all files with specific extension
   // Parse --ext CLI argument (default: .txt)
 
-  const rootPath = path.resolve('workspace')
+  const rootPath = path.resolve('workspace');
 
-  await isWorkspaceExist(rootPath)
+  await isWorkspaceExist(rootPath);
 
-  const dirEntries = await fs.readdir(rootPath, { withFileTypes: true })
+  const dirEntries = await fs.readdir(rootPath, { withFileTypes: true });
 
-  const files = await findFiles(dirEntries)
+  const files = await findFiles(dirEntries);
 
-  const extIndex = argv.indexOf('--ext')
-  const userInputs = extIndex !== -1
-    ? findAllUserInputs(extIndex)
-    : new Set(['txt'])
-  
-  const filteredFiles = filterFilesByUserInput(files, userInputs)
+  const extIndex = argv.indexOf('--ext');
+  const userInputs =
+    extIndex !== -1 ? findAllUserInputs(extIndex) : new Set(['txt']);
 
-  for(const filteredFile of filteredFiles){
-    stdout.write(filteredFile.path + '\n')
+  const filteredFiles = filterFilesByUserInput(files, userInputs);
+
+  for (const filteredFile of filteredFiles) {
+    stdout.write(filteredFile.path + '\n');
   }
 };
 
@@ -49,25 +48,23 @@ function findAllUserInputs(index, result = []) {
 }
 
 async function findFiles(entries, result = [], currentDir = 'workspace') {
-
   for (const entry of entries) {
-
     if (entry.isFile()) {
       const item = {
         name: entry.name,
-        path: path.join(currentDir, entry.name)
-      }
-      result.push(item)
+        path: path.join(currentDir, entry.name),
+      };
+      result.push(item);
     }
 
     if (entry.isDirectory()) {
-      const nextDir = path.join(currentDir, entry.name)
-      const nextEntries = await fs.readdir(nextDir, { withFileTypes: true })
+      const nextDir = path.join(currentDir, entry.name);
+      const nextEntries = await fs.readdir(nextDir, { withFileTypes: true });
 
-      await findFiles(nextEntries, result, nextDir)
+      await findFiles(nextEntries, result, nextDir);
     }
   }
-  return result
+  return result;
 }
 
 async function isWorkspaceExist(workspacePath) {
@@ -81,4 +78,3 @@ async function isWorkspaceExist(workspacePath) {
     throw new Error('FS operation failed');
   }
 }
-
