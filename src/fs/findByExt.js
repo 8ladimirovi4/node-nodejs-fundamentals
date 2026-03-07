@@ -4,7 +4,6 @@ import fs from 'fs/promises';
 const { argv, stdout } = process;
 
 const findByExt = async () => {
-  console.log('===>  argv', argv)
   // Write your code here
   // Recursively find all files with specific extension
   // Parse --ext CLI argument (default: .txt)
