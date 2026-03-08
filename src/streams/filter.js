@@ -3,48 +3,53 @@ import { Transform } from "stream";
 const filter = () => {
   const args = process.argv;
   const patterns = filterInput(args);
-  
   const hasPatternFlag = args.includes('--pattern');
+
+  let buffer = "";
 
   const transform = new Transform({
     transform(chunk, encoding, callback) {
-      const lines = chunk.toString().split('\n'); 
+      buffer += chunk.toString();
+      const lines = buffer.split("\n");
+      buffer = lines.pop() ?? "";
 
-      const result = hasPatternFlag 
-        ? lines.filter(line => {
-            if (!line.trim()) return false;
-            return patterns.has(line.trim());
-          })
+      const result = hasPatternFlag
+        ? lines.filter((line) =>
+            patterns.some((pattern) => line.includes(pattern))
+          )
         : lines;
-        
-      const output = result.length > 0 ? result.join('\n') + '\n' : '';
-      
+
+      const output = result.length > 0 ? result.join("\n") + "\n" : "";
       callback(null, output);
-    }
+    },
+    flush(callback) {
+      if (buffer && (!hasPatternFlag || patterns.some((p) => buffer.includes(p)))) {
+        callback(null, buffer + "\n");
+      } else {
+        callback(null);
+      }
+    },
   });
 
-  process.stdin
-    .pipe(transform)
-    .pipe(process.stdout);
-
-  process.stdout.on('finish', () => process.exit(0));
+  process.stdin.pipe(transform).pipe(process.stdout);
 };
 
 filter();
 
 function filterInput(inputs) {
-  const set = new Set();
-  if (!inputs) return set;
+  const patterns = [];
+  if (!inputs) return patterns;
 
-  const startIndex = inputs.indexOf('--pattern');
+  const startIndex = inputs.indexOf("--pattern");
+  if (startIndex === -1) return patterns;
 
-  if (startIndex !== -1) {
-    for (let i = startIndex + 1; i < inputs.length; i++) {
-      if (inputs[i]) {
-        set.add(inputs[i]);
-      }  
+  for (let i = startIndex + 1; i < inputs.length; i++) {
+    const arg = inputs[i];
+    if (arg && !arg.startsWith("--")) {
+      patterns.push(arg);
+    } else {
+      break;
     }
   }
-  
-  return set;
+  return patterns;
 }
