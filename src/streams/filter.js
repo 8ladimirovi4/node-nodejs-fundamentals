@@ -1,6 +1,9 @@
 import { Transform } from "stream";
 
 const filter = () => {
+  //script for windows users
+  //"streams:filter": "node -e "console.log('hello\nworld\ntest')" | node src/streams/filter.js --pattern test"
+  
   const args = process.argv;
   const patterns = filterInput(args);
   const hasPatternFlag = args.includes('--pattern');
