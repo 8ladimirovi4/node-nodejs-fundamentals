@@ -1,18 +1,18 @@
-import { createReadStream, createWriteStream, readdirSync, unlinkSync } from "fs";
-import path from "path";
+import {
+  createReadStream,
+  createWriteStream,
+  readdirSync,
+  unlinkSync,
+} from 'fs';
+import path from 'path';
 
 const split = async () => {
-    // Write your code here
-  // Read source.txt using Readable Stream
-  // Split into chunk_1.txt, chunk_2.txt, etc.
-  // Each chunk max N lines (--lines CLI argument, default: 10)
-  
-  const sourceFile = path.resolve("source.txt");
+  const sourceFile = path.resolve('source.txt');
   const cwd = process.cwd();
   readdirSync(cwd)
-    .filter((f) => f.startsWith("chunk_") && f.endsWith(".txt"))
+    .filter((f) => f.startsWith('chunk_') && f.endsWith('.txt'))
     .forEach((f) => unlinkSync(path.join(cwd, f)));
-  const linesArgIdx = process.argv.indexOf("--lines");
+  const linesArgIdx = process.argv.indexOf('--lines');
   let linesCount = 10;
 
   if (linesArgIdx !== -1 && process.argv[linesArgIdx + 1]) {
@@ -27,22 +27,22 @@ await split();
 function processFile(filePath, linesCount) {
   return new Promise((resolve, reject) => {
     const readStream = createReadStream(filePath);
-    let buffer = "";
+    let buffer = '';
     let lineBuffer = [];
     let chunkIndex = 1;
 
     const writeChunk = (lines) => {
       if (lines.length === 0) return;
       const writeStream = createWriteStream(`chunk_${chunkIndex}.txt`);
-      writeStream.write(lines.join("\n") + "\n");
+      writeStream.write(lines.join('\n') + '\n');
       writeStream.end();
       chunkIndex++;
     };
 
-    readStream.on("data", (chunk) => {
+    readStream.on('data', (chunk) => {
       buffer += chunk.toString();
-      const lines = buffer.split("\n");
-      buffer = lines.pop() ?? "";
+      const lines = buffer.split('\n');
+      buffer = lines.pop() ?? '';
 
       for (const line of lines) {
         lineBuffer.push(line);
@@ -53,7 +53,7 @@ function processFile(filePath, linesCount) {
       }
     });
 
-    readStream.on("end", () => {
+    readStream.on('end', () => {
       if (buffer) {
         lineBuffer.push(buffer);
       }
@@ -63,7 +63,6 @@ function processFile(filePath, linesCount) {
       resolve();
     });
 
-    readStream.on("error", reject);
+    readStream.on('error', reject);
   });
 }
-

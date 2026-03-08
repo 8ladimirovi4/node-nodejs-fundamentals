@@ -6,12 +6,6 @@ import { PassThrough } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 
 const compressDir = async () => {
-    // Write your code here
-  // Read all files from workspace/toCompress/
-  // Compress entire directory structure into archive.br
-  // Save to workspace/compressed/
-  // Use Streams API
-
   const rootDir = path.resolve('workspace');
   const toCompressDir = path.join(rootDir, 'toCompress');
   const outputPath = path.join(rootDir, 'compressed', 'archive.br');

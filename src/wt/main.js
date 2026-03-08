@@ -54,14 +54,6 @@ function sortChunkInWorker(chunk) {
 }
 
 const main = async () => {
-    // Write your code here
-  // Read data.json containing array of numbers
-  // Split into N chunks (N = CPU cores)
-  // Create N workers, send one chunk to each
-  // Collect sorted chunks
-  // Merge using k-way merge algorithm
-  // Log final sorted array
-  
   const raw = await readFile(DATA_PATH, 'utf-8');
   const numbers = JSON.parse(raw);
 
@@ -69,7 +61,7 @@ const main = async () => {
   const chunks = splitIntoChunks(numbers, n);
 
   const sortedChunks = await Promise.all(
-    chunks.map((chunk) => sortChunkInWorker(chunk))
+    chunks.map((chunk) => sortChunkInWorker(chunk)),
   );
 
   const result = mergeSortedChunks(sortedChunks);

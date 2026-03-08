@@ -3,10 +3,6 @@ import { createInterface } from 'readline/promises';
 const { stdin: STD_IN, stdout: STD_OUT } = process;
 
 const interactive = () => {
-  // Write your code here
-  // Use readline module for interactive CLI
-  // Support commands: uptime, cwd, date, exit
-  // Handle Ctrl+C and unknown commands
   const rl = createInterface({
     input: STD_IN,
     output: STD_OUT,

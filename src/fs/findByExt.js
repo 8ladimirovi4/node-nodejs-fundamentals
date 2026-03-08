@@ -4,10 +4,6 @@ import fs from 'fs/promises';
 const { argv, stdout } = process;
 
 const findByExt = async () => {
-  // Write your code here
-  // Recursively find all files with specific extension
-  // Parse --ext CLI argument (default: .txt)
-
   const rootPath = path.resolve('workspace');
 
   await isWorkspaceExist(rootPath);

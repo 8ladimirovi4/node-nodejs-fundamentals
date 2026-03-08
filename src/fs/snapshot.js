@@ -2,12 +2,6 @@ import { promises as fs } from 'fs';
 import path from 'path';
 
 const snapshot = async () => {
-  // Write your code here
-  // Recursively scan workspace directory
-  // Write snapshot.json with:
-  // - rootPath: absolute path to workspace
-  // - entries: flat array of relative paths and metadata
-
   const rootPath = path.resolve('workspace');
 
   await isWorkspaceExist(rootPath);

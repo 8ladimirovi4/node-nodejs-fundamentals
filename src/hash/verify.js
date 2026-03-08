@@ -4,14 +4,6 @@ import path from 'path';
 import crypto from 'crypto';
 
 const verify = async () => {
-  // Write your code here
-  // Read checksums.json
-  // Calculate SHA256 hash using Streams API
-  // Print result: filename — OK/FAIL
-
-  //create file_*.txt in the root of workspace dir
-  //create checksums.json in the root dir
-
   const checksumsFilePath = path.resolve('checksums.json');
   const txtFilesDir = 'workspace';
 
