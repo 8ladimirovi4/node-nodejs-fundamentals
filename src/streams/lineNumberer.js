@@ -1,4 +1,3 @@
-import { createInterface } from 'readline/promises';
 import { Transform } from 'stream';
 
 const lineNumberer = () => {
